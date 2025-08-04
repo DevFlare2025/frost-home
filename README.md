@@ -33,6 +33,7 @@ echo "kernel.apparmor_restrict_unprivileged_userns=0" | sudo tee /etc/sysctl.d/6
 sudo sysctl --system
 ```
 ## 3. Estructura de archivos
+```bash
 frost-home/
 ├── home-manager/
 │   ├── flake.lock
@@ -40,3 +41,4 @@ frost-home/
 │   └── home.nix
 ├── install.sh
 └── README.md
+```
