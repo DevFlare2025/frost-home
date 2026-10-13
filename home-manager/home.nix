@@ -1,4 +1,4 @@
-{homeUser, config, pkgs, lib, ... }:
+{ homeUser, config, pkgs, lib, ... }:
 
 let
   isLinux = pkgs.stdenv.hostPlatform.isLinux;
@@ -12,15 +12,18 @@ let
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "sha256-NgZkk3CVxb1oEqUPxjILRYFVZJ2XlM++FoqmgTn9TBg=";;
+      sha256 = "sha256-NgZkk3CVxb1oEqUPxjILRYFVZJ2XlM++FoqmgTn9TBg=";
     };
   });
 in
 
 {
   home.username = homeUser;
+
   home.homeDirectory = (
-    if isLinux then "/home/${config.home.username}" else "/Users/${config.home.username}"
+    if isLinux
+    then "/home/${config.home.username}"
+    else "/Users/${config.home.username}"
   );
 
   home.stateVersion = "24.11";
@@ -38,20 +41,38 @@ in
   };
 
   home.packages = with pkgs; [
+    # Cloud
     awscli2
+
+    # Git
     lazygit
-    lazydocker
     gh
+
+    # Contenedores
+    docker
+    docker-compose
+    lazydocker
     podman
-    nixfmt-rfc-style
+
+    # Bases de datos
     jetbrains.datagrip
+    dbeaver-bin
+
+    # Desarrollo
+    pnpm
+    nixfmt-rfc-style
     vscode
-    tmux
-    unzip
     neovim_0111
-    nerd-fonts.jetbrains-mono
     luajit
     luarocks
+
+    # Terminal
+    tmux
+    yazi
+    unzip
+
+    # Fuentes
+    nerd-fonts.jetbrains-mono
   ];
 
   home.file = { };
@@ -61,6 +82,7 @@ in
   };
 
   programs.home-manager.enable = true;
+
   programs.direnv.enable = true;
 
   programs.bash = {
@@ -80,11 +102,13 @@ in
     enable = true;
     userName = "${GIT_USER}";
     userEmail = "${GIT_EMAIL}";
+
     extraConfig = {
       commit.gpgsign = true;
       gpg.format = "ssh";
       user.signingkey = "$SSH_PUB_KEY";
     };
+
     aliases = {
       "subup" = "submodule update --init --recursive";
       "co" = "checkout";
@@ -96,6 +120,7 @@ in
       "po" = "push origin";
       "cp" = "cherry-pick";
       "rmcache" = "rm -rf --cached .";
+
       "gone" = "! git fetch -p && git for-each-ref --format '%(refname:short) %(upstream:track)' | awk '$2 == \"[gone]\" {print $1}' | xargs -r git branch -D";
     };
   };
